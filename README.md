@@ -22,6 +22,11 @@ The solution involved:
 - SQL (data management)
 - Excel (initial calculations and integration plans)
 - UI/UX wireframing tools for interface design
-- Electron (API integration for front- and backend communication)
+- Eel (Python library for frontend and backend communication and desktop GUI integration)
+
+# Requirements
+eel==0.18.2
 
 [View the full design process report here.](427704_Silke_Wittich_Design_Process_Report.pdf)
+
+[Download the compiled executable here.](https://drive.google.com/file/d/1yrfXx9KpgkuBEqO4kaoz69DuGgUNqGi_/view?usp=sharing)
