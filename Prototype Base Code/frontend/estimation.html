@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Roofing Estimation - Work Page</title>
+  <script type="text/javascript" src="/eel.js"></script>
+  <script type="text/javascript" src="js/project-io.js"></script>
+  <script type="text/javascript" src="js/estimation.js"></script>
+  <link rel="stylesheet" href="css/estimation.css">
+</head>
+<body>
+  <!-- Header with menu toggle -->
+  <div class="header">
+    <h1>Roofing Estimation</h1>
+    <button class="menu-toggle" onclick="toggleSidePanel()">☰</button>
+  </div>
+
+  <!-- Side panel -->
+  <div class="side-panel" id="sidePanel">
+    <button class="side-panel-close" onclick="toggleSidePanel()">✕</button>
+    <div class="side-panel-buttons">
+      <button onclick="window.location.href='home.html'">Back to Home</button>
+      <button onclick="saveProject()">Save Project</button>
+      <button onclick="window.location.href='final-total.html'">View Final Totals</button>
+      <button onclick="exportToExcel()">Export to Excel</button>
+      <button onclick="printEstimation()">Print</button>
+    </div>
+  </div>
+  
+  <!-- Overlay -->
+  <div class="overlay" id="overlay" onclick="toggleSidePanel()"></div>
+  
+  <div class="container">
+    <div class="tables-container">
+      <!-- Left table - Quantities -->
+      <div class="quantities-table">
+        <h2>Production Quantities</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Sub Description</th>
+              <th>Extra Input</th>
+              <th>Value</th>
+              <th>Unit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- New items from main.py - Total Roof Area -->
+            <tr>
+              <td>Total Roof Area</td>
+              <td> - Tear-Off</td>
+              <td></td>
+              <td><input type="number" id="roofAreaTearOff"></td>
+              <td>SQ FT</td>
+            </tr>
+            <tr>
+              <td>Total Roof Area</td>
+              <td> - Insulation</td>
+              <td></td>
+              <td><input type="number" id="roofAreaInsulation" class="readonly" readonly></td>
+              <td>SQ FT</td>
+            </tr>
+            <tr>
+              <td>Total Roof Area</td>
+              <td> - Membrane</td>
+              <td></td>
+              <td><input type="number" id="roofAreaMembrane" class="readonly" readonly></td>
+              <td>SQ FT</td>
+            </tr>
+            <tr>
+              <td>Total Roof Area</td>
+              <td> - Coating</td>
+              <td></td>
+              <td><input type="number" id="roofAreaCoating" class="readonly" readonly></td>
+              <td>SQ FT</td>
+            </tr>
+            
+            <!-- Perimeter row -->
+            <tr>
+              <td>Perimeter</td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="perimeter"></td>
+              <td>LN FT</td>
+            </tr>
+            
+            <!-- Wall Height row -->
+            <tr>
+              <td>Area of Perimeter</td>
+              <td>Wall Height (LF)</td>
+              <td><input type="number" id="wallHeight" onchange="calculateValues()"></td>
+              <td><input type="number" id="areaOfPerimeter" class="readonly" readonly></td>
+              <td>SQ FT</td>
+            </tr>
+            
+            <!-- New Curb rows -->
+            <tr>
+              <td>Number of Curbs</td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="numberOfCurbs"></td>
+              <td>EA</td>
+            </tr>
+            <tr>
+              <td>Curb Perimeter</td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="curbPerimeter"></td>
+              <td>LN FT</td>
+            </tr>
+            
+            <!-- Sheet Width row -->
+            <tr>
+              <td>LN FT of Field Seam</td>
+              <td>Sheet Width (FT)</td>
+              <td><input type="number" id="sheetWidth" onchange="calculateValues()"></td>
+              <td><input type="number" id="lnFtFieldSeam" class="readonly" readonly></td>
+              <td>LN FT</td>
+            </tr>
+            
+            <!-- New rows from main.py -->
+            <tr>
+              <td>LN FT of Walkway</td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="lnFtWalkway"></td>
+              <td>LN FT</td>
+            </tr>
+            <tr>
+              <td>SF of Walkway</td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="sfWalkway"></td>
+              <td>SQ FT</td>
+            </tr>
+            <tr>
+              <td>Number of Roof Drains</td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="roofDrains"></td>
+              <td>EA</td>
+            </tr>
+            <tr>
+              <td>Number of Scuppers</td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="scuppers"></td>
+              <td>EA</td>
+            </tr>
+            <tr>
+              <td>Number of VTR'S</td>
+              <td> - SMALL</td>
+              <td></td>
+              <td><input type="number" id="vtrsSmall"></td>
+              <td>EA</td>
+            </tr>
+            <tr>
+              <td>Number of VTR'S</td>
+              <td> - LARGE / Universal</td>
+              <td></td>
+              <td><input type="number" id="vtrsLarge"></td>
+              <td>EA</td>
+            </tr>
+            <tr>
+              <td>Taper Area</td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="taperArea"></td>
+              <td>SQ FT</td>
+            </tr>
+            
+            <tr>
+              <td>Insulation Fasteners & Plates</td>
+              <td>Fasteners / Board (EA)</td>
+              <td><input type="number" id="fastenersPerBoard" onchange="calculateValues()"></td>
+              <td><input type="number" id="insulationFasteners" class="readonly" readonly></td>
+              <td>EA</td>
+            </tr>
+            
+            <!-- Additional rows from main.py -->
+            <tr>
+              <td>Perimeter Securement</td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="perimeterSecurement" class="readonly" readonly></td>
+              <td>LN FT</td>
+            </tr>
+            <tr>
+              <td>Expansion Joint</td>
+              <td> (Wall)</td>
+              <td></td>
+              <td><input type="number" id="expansionJointWall"></td>
+              <td>LN FT</td>
+            </tr>
+            <tr>
+              <td>Expansion Joint</td>
+              <td> (Field)</td>
+              <td></td>
+              <td><input type="number" id="expansionJointField"></td>
+              <td>LN FT</td>
+            </tr>
+            <tr>
+              <td>Coating</td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="coating"></td>
+              <td>SQ FT</td>
+            </tr>
+            <tr>
+              <td>Pavers</td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="pavers"></td>
+              <td>SQ FT</td>
+            </tr>
+            <tr>
+              <td>Paver Perimeter</td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="paverPerimeter"></td>
+              <td>LN FT</td>
+            </tr>
+            <tr>
+              <td><input type="text" id="tr725Description" value="725TR" class="editable-description"></td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="tr725"></td>
+              <td>
+                <select id="tr725Unit">
+                  <option value="EA">EA</option>
+                  <option value="LN FT">LN FT</option>
+                  <option value="SQ FT">SQ FT</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="text" id="cavGripDescription" value="CAV Grip" class="editable-description"></td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="cavGrip"></td>
+              <td>
+                <select id="cavGripUnit">
+                  <option value="EA">EA</option>
+                  <option value="LN FT">LN FT</option>
+                  <option value="SQ FT">SQ FT</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="text" id="moldedSealantPocketDescription" value="Molded Sealant Pocket" class="editable-description"></td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="moldedSealantPocket"></td>
+              <td>
+                <select id="moldedSealantPocketUnit">
+                  <option value="EA">EA</option>
+                  <option value="LN FT">LN FT</option>
+                  <option value="SQ FT">SQ FT</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="text" id="onePartSealantDescription" value="One Part Sealant (2/pcket)" class="editable-description"></td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="onePartSealant" class="readonly" readonly></td>
+              <td>
+                <select id="onePartSealantUnit">
+                  <option value="EA">EA</option>
+                  <option value="LN FT">LN FT</option>
+                  <option value="SQ FT">SQ FT</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="text" id="hpxPerimDescription" value="2" HP-X Perim" class="editable-description"></td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="hpxPerim" class="readonly" readonly></td>
+              <td>
+                <select id="hpxPerimUnit">
+                  <option value="EA">EA</option>
+                  <option value="LN FT">LN FT</option>
+                  <option value="SQ FT">SQ FT</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="text" id="copingUnderlaymentDescription" value="Coping Underlayment" class="editable-description"></td>
+              <td></td>
+              <td></td>
+              <td><input type="number" id="copingUnderlayment"></td>
+              <td>
+                <select id="copingUnderlaymentUnit">
+                  <option value="EA">EA</option>
+                  <option value="LN FT">LN FT</option>
+                  <option value="SQ FT">SQ FT</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>      
+              
+      <!-- Right table - Material Pricing -->
+      <div class="materials-table">
+        <h2>Material Pricing <button onclick="loadMembraneTypes()" style="font-size: 0.8em; padding: 2px 5px;">Reload Materials</button></h2>
+        
+        <!-- Add discount inputs -->
+        <div class="discount-controls">
+          <div>
+            <label for="distributor-discount">Distributor Discount:</label>
+            <input type="number" id="distributor-discount" min="0" max="1" step="0.01" value="0.1" onchange="updateAllDiscounts()">
+            <span>(10% = 0.1)</span>
+          </div>
+          <div>
+            <label for="direct-discount">Direct Discount:</label>
+            <input type="number" id="direct-discount" min="0" max="1" step="0.01" value="0.05" onchange="updateAllDiscounts()">
+            <span>(5% = 0.05)</span>
+          </div>
+        </div>
+        
+        <table id="materialPricingTable">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Sub Description</th>
+              <th>Quantity</th>
+              <th>Unit</th>
+              <th>Base Price</th>
+              <th>Discount Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="materialPricingBody">
+            <tr id="membrane-type-row">
+              <td>
+                <select id="membrane-type-description" onchange="updateMembraneType()">
+                  <option value="">Membrane Type</option>
+                  <!-- Options will be loaded dynamically -->
+                </select>
+              </td>
+              <td>Field & Seams</td>
+              <td><input type="number" id="membrane-type-quantity" class="readonly" readonly></td>
+              <td><span id="membrane-type-unit"></span></td>
+              <td><input type="number" id="membrane-type-base-price" step="0.01" class="editable"></td>
+              <td><input type="number" id="membrane-type-discount-price" step="0.01" class="editable"></td>
+              <td><input type="number" id="membrane-type-total" class="readonly" readonly></td>
+            </tr>
+            <tr id="membrane-perimeter-row">
+              <td>
+                <span>Membrane Type</span>
+              </td>
+              <td>Perimeter & Walls</td>
+              <td><input type="number" id="membrane-perimeter-quantity" class="readonly" readonly></td>
+              <td><span id="membrane-perimeter-unit"></span></td>
+              <td><input type="number" id="membrane-perimeter-base-price" class="readonly" readonly></td>
+              <td><input type="number" id="membrane-perimeter-discount-price" class="readonly" readonly></td>
+              <td><input type="number" id="membrane-perimeter-total" class="readonly" readonly></td>
+            </tr>
+            <tr id="membrane-curb-row">
+              <td>
+                <span>Membrane Type</span>
+              </td>
+              <td>Curb Perimeter</td>
+              <td><input type="number" id="membrane-curb-quantity" class="readonly" readonly></td>
+              <td><span id="membrane-curb-unit"></span></td>
+              <td><input type="number" id="membrane-curb-base-price" class="readonly" readonly></td>
+              <td><input type="number" id="membrane-curb-discount-price" class="readonly" readonly></td>
+              <td><input type="number" id="membrane-curb-total" class="readonly" readonly></td>
+            </tr>
+            <!-- Protection Mat row -->
+            <tr id="protection-mat-row">
+              <td>
+                <span>Protection Mat</span>
+              </td>
+              <td></td>
+              <td><input type="number" id="protection-mat-quantity" class="editable"></td>
+              <td><span id="protection-mat-unit"></span></td>
+              <td><input type="number" id="protection-mat-base-price" step="0.01" class="readonly" readonly></td>
+              <td><input type="number" id="protection-mat-discount-price" step="0.01" class="readonly" readonly></td>
+              <td><input type="number" id="protection-mat-total" class="readonly" readonly></td>
+            </tr>
+            <!-- Weathered Mem Cleaner rows -->
+            <tr id="weathered-mem-cleaner-row">
+              <td>
+                <span>Weathered Mem Cleaner</span>
+              </td>
+              <td>Field & Seams</td>
+              <td><input type="number" id="weathered-mem-cleaner-quantity" class="readonly" readonly></td>
+              <td><span id="weathered-mem-cleaner-unit"></span></td>
+              <td><input type="number" id="weathered-mem-cleaner-base-price" step="0.01" class="readonly" readonly></td>
+              <td><input type="number" id="weathered-mem-cleaner-discount-price" step="0.01" class="readonly" readonly></td>
+              <td><input type="number" id="weathered-mem-cleaner-total" class="readonly" readonly></td>
+            </tr>
+            <tr id="weathered-mem-cleaner-perimeter-row">
+              <td>
+                <span>Weathered Mem Cleaner</span>
+              </td>
+              <td>Perimeter & Walls</td>
+              <td><input type="number" id="weathered-mem-cleaner-perimeter-quantity" class="readonly" readonly></td>
+              <td><span id="weathered-mem-cleaner-perimeter-unit"></span></td>
+              <td><input type="number" id="weathered-mem-cleaner-perimeter-base-price" class="readonly" readonly></td>
+              <td><input type="number" id="weathered-mem-cleaner-perimeter-discount-price" class="readonly" readonly></td>
+              <td><input type="number" id="weathered-mem-cleaner-perimeter-total" class="readonly" readonly></td>
+            </tr>
+            <tr id="weathered-mem-cleaner-curb-row">
+              <td>
+                <span>Weathered Mem Cleaner</span>
+              </td>
+              <td>Curb Perimeter</td>
+              <td><input type="number" id="weathered-mem-cleaner-curb-quantity" class="readonly" readonly></td>
+              <td><span id="weathered-mem-cleaner-curb-unit"></span></td>
+              <td><input type="number" id="weathered-mem-cleaner-curb-base-price" class="readonly" readonly></td>
+              <td><input type="number" id="weathered-mem-cleaner-curb-discount-price" class="readonly" readonly></td>
+              <td><input type="number" id="weathered-mem-cleaner-curb-total" class="readonly" readonly></td>
+            </tr>
+            
+          </tbody>
+        </table>
+        <div class="action-buttons">
+          <button onclick="saveProject()" class="primary-button">Save Project</button>
+          <button onclick="window.location.href='final-total.html'" class="primary-button">Calculate Final Totals</button>
+        </div>
+      </div>      
+    </div>
+  </div>
+</body>
+</html>

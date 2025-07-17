@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Roofing Estimation - Final Totals</title>
+  <script type="text/javascript" src="/eel.js"></script>
+  <script type="text/javascript" src="js/project-io.js"></script>
+  <script type="text/javascript" src="js/final-total.js"></script>
+  <link rel="stylesheet" href="css/final-total.css">
+</head>
+<body>
+  <!-- Header with menu toggle -->
+  <div class="header">
+    <h1>Roofing Estimation - Final Totals</h1>
+    <button class="menu-toggle" onclick="toggleSidePanel()">☰</button>
+  </div>
+
+  <!-- Side panel -->
+  <div class="side-panel" id="sidePanel">
+    <button class="side-panel-close" onclick="toggleSidePanel()">✕</button>
+    <div class="side-panel-buttons">
+      <button onclick="window.location.href='home.html'">Back to Home</button>
+      <button onclick="window.location.href='estimation.html'">Back to Estimation</button>
+      <button onclick="saveProject()">Save Project</button>
+      <button onclick="exportToExcel()">Export to Excel</button>
+      <button onclick="printFinalTotal()">Print</button>
+    </div>
+  </div>
+  
+  <!-- Overlay -->
+  <div class="overlay" id="overlay" onclick="toggleSidePanel()"></div>
+  
+  <div class="container">
+    <div class="project-info">
+      <h2>Project: <span id="project-name">Loading...</span></h2>
+    </div>
+
+    <!-- Final Total Summary -->
+    <div class="summary-container">
+      <h2>Final Total Summary</h2>
+      <div class="grand-total">
+        <h3>Grand Total: $<span id="grand-total">0.00</span></h3>
+      </div>
+    </div>
+
+    <!-- Final Total Details Table -->
+    <div class="final-total-table">
+      <h2>Final Total Details</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Total Quantity</th>
+            <th>Unit Price</th>
+            <th>Total Price</th>
+          </tr>
+        </thead>
+        <tbody id="final-total-body">
+          <!-- Rows will be populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Material Breakdown Table -->
+    <div class="material-breakdown-table">
+      <h2>Material Breakdown</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Sub Description</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+            <th>Base Price</th>
+            <th>Discount Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="material-breakdown-body">
+          <!-- Rows will be populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button onclick="calculateFinalTotal()" class="primary-button">Recalculate Final Total</button>
+      <button onclick="window.location.href='estimation.html'" class="secondary-button">Back to Estimation</button>
+    </div>
+  </div>
+</body>
+</html>
